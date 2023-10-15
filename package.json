@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "db:push": "dotenv drizzle-kit push:mysql",
+    "db:push": "dotenv drizzle-kit push:sqlite",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start"
@@ -17,6 +17,7 @@
     "@trpc/next": "^10.37.1",
     "@trpc/react-query": "^10.37.1",
     "@trpc/server": "^10.37.1",
+    "better-sqlite3": "^9.0.0",
     "drizzle-orm": "^0.28.5",
     "next": "^13.5.4",
     "react": "18.2.0",
@@ -25,6 +26,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.5",
     "@types/eslint": "^8.44.2",
     "@types/node": "^18.16.0",
     "@types/react": "^18.2.20",
