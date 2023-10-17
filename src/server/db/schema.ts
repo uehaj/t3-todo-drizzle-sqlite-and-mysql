@@ -5,6 +5,6 @@ export const todos = sqliteTable("todos", {
   id: integer("id").primaryKey({ autoIncrement: true }).notNull(),
   text: text("text"),
   done: integer("done", { mode: "boolean" }),
-  createdAt: text("timestamp").default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: text("timestamp"),
+  createdAt: text("createdAt").default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updatedAt"),
 });

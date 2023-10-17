@@ -12,4 +12,4 @@ export const db: BetterSQLite3Database<typeof schema> = drizzle(sqlite, {
   schema,
   logger: true,
 });
-migrate(db, { migrationsFolder: "./drizzle" });
+// migrate(db, { migrationsFolder: "./drizzle" });
