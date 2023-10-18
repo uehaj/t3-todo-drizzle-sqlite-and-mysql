@@ -34,7 +34,7 @@ export const todoRouter = createTRPCRouter({
       const { id, done } = input;
       return ctx.db
         .update(schema.todos)
-        .set({ done: done })
+        .set({ done: done, updatedAt: new Date().toISOString() })
         .where(eq(schema.todos.id, id));
     }),
 });

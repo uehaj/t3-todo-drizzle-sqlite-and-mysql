@@ -6,5 +6,5 @@ export const todos = sqliteTable("todos", {
   text: text("text"),
   done: integer("done", { mode: "boolean" }),
   createdAt: text("createdAt").default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: text("updatedAt"),
+  updatedAt: text("updatedAt").default(sql`CURRENT_TIMESTAMP`),
 });

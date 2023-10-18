@@ -77,9 +77,9 @@ const TodoApp: NextPage = () => {
                   checked={!!todo.done}
                   onChange={() => handleDoneTodo(todo.id, !todo.done)}
                 />
-                <span className={todo.done ? "line-through" : ""}>
+                <div className={todo.done ? "line-through" : ""}>
                   {todo.text}
-                </span>
+                </div>
                 <button
                   className="ml-auto rounded bg-red-500 px-2 py-1 font-bold text-white hover:bg-red-700"
                   onClick={() => handleDeleteTodo(todo.id)}
