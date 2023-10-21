@@ -24,13 +24,14 @@ export default function TodoAppSqlite() {
     },
   });
 
-  function handleAddTodo(e: FormEvent) {
+  async function handleAddTodo(e: FormEvent) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
     form.reset();
-    void todoAddAsync(formJson as { text: string });
+    const result = await todoAddAsync(formJson as { text: string });
+    console.log(`result=`, result[0]);
   }
 
   function handleDeleteTodo(id: number) {

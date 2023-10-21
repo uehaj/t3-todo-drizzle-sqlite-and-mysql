@@ -4,13 +4,7 @@ import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { env } from "~/env.mjs";
 import * as schema from "./schema";
 
-const url = env.DATABASE_URL_SQLITE.replace(/^file:\/\//, "").replace(
-  /^file:/,
-  "",
-);
-
-console.log(`url=`, url);
-const sqlite = new Database(url);
+const sqlite = new Database(env.DATABASE_URL_SQLITE);
 export const db: BetterSQLite3Database<typeof schema> = drizzle(sqlite, {
   schema,
   logger: true,

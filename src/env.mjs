@@ -9,7 +9,6 @@ export const env = createEnv({
   server: {
     DATABASE_URL_SQLITE: z
       .string()
-      .url()
       .refine(
         (str) => !str.includes("YOUR_SQLITE_URL_HERE"),
         "You forgot to change the default URL",
