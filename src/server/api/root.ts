@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "~/server/api/trpc";
-import { todoRouter } from "~/server/api/routers/todo";
+import { todoSqliteRouter } from "~/server/api/routers/todoSqlite";
+import { todoMySqlRouter } from "~/server/api/routers/todoMySql";
 
 /**
  * This is the primary router for your server.
@@ -7,7 +8,8 @@ import { todoRouter } from "~/server/api/routers/todo";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  todo: todoRouter,
+  todoSqlite: todoSqliteRouter,
+  todoMySql: todoMySqlRouter,
 });
 
 // export type definition of API

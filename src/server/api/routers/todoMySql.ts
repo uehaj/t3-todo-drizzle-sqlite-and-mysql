@@ -1,12 +1,12 @@
 import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import * as schema from "~/server/db/schema";
+import * as schema_mysql from "~/server/db/mysql/schema";
 
-export const todoRouter = createTRPCRouter({
+export const todoMySqlRouter = createTRPCRouter({
   getAll: publicProcedure.input(z.void()).query(({ ctx }) => {
-    return ctx.db.query.todos.findMany({
-      orderBy: [desc(schema.todos.id)],
+    return ctx.db_mysql.query.todos.findMany({
+      orderBy: [desc(schema_mysql.todos.id)],
     });
   }),
 
@@ -18,23 +18,27 @@ export const todoRouter = createTRPCRouter({
     )
     .mutation(({ ctx, input }) => {
       const { text } = input;
-      return ctx.db.insert(schema.todos).values({ done: false, text });
+      return ctx.db_mysql
+        .insert(schema_mysql.todos)
+        .values({ done: false, text });
     }),
 
   delete: publicProcedure
     .input(z.object({ id: z.number() }))
     .mutation(({ ctx, input }) => {
       const { id } = input;
-      return ctx.db.delete(schema.todos).where(eq(schema.todos.id, id));
+      return ctx.db_mysql
+        .delete(schema_mysql.todos)
+        .where(eq(schema_mysql.todos.id, id));
     }),
 
   done: publicProcedure
     .input(z.object({ id: z.number(), done: z.boolean() }))
     .mutation(({ ctx, input }) => {
       const { id, done } = input;
-      return ctx.db
-        .update(schema.todos)
-        .set({ done: done, updatedAt: new Date().toISOString() })
-        .where(eq(schema.todos.id, id));
+      return ctx.db_mysql
+        .update(schema_mysql.todos)
+        .set({ done: done })
+        .where(eq(schema_mysql.todos.id, id));
     }),
 });

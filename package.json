@@ -19,6 +19,7 @@
     "@trpc/server": "^10.37.1",
     "better-sqlite3": "^9.0.0",
     "drizzle-orm": "^0.28.5",
+    "mysql2": "^3.6.2",
     "next": "^13.5.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",

@@ -5,23 +5,23 @@ import { api } from "~/utils/api";
 
 const TodoApp: NextPage = () => {
   const utils = api.useContext();
-  const todos = api.todo.getAll.useQuery();
+  const todos = api.todoSqlite.getAll.useQuery();
 
-  const { mutateAsync: todoAddAsync } = api.todo.add.useMutation({
+  const { mutateAsync: todoAddAsync } = api.todoSqlite.add.useMutation({
     onSettled: () => {
-      void utils.todo.invalidate();
+      void utils.todoSqlite.invalidate();
     },
   });
 
-  const { mutateAsync: todoDeleteAsync } = api.todo.delete.useMutation({
+  const { mutateAsync: todoDeleteAsync } = api.todoSqlite.delete.useMutation({
     onSettled: () => {
-      void utils.todo.invalidate();
+      void utils.todoSqlite.invalidate();
     },
   });
 
-  const { mutateAsync: todoDoneAsync } = api.todo.done.useMutation({
+  const { mutateAsync: todoDoneAsync } = api.todoSqlite.done.useMutation({
     onSettled: () => {
-      void utils.todo.invalidate();
+      void utils.todoSqlite.invalidate();
     },
   });
 

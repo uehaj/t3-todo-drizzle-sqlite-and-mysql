@@ -4,7 +4,10 @@ import { migrate } from "drizzle-orm/better-sqlite3/migrator";
 import { env } from "~/env.mjs";
 import * as schema from "./schema";
 
-const url = env.DATABASE_URL.replace(/^file:\/\//, "").replace(/^file:/, "");
+const url = env.DATABASE_URL_SQLITE.replace(/^file:\/\//, "").replace(
+  /^file:/,
+  "",
+);
 
 console.log(`url=`, url);
 const sqlite = new Database(url);

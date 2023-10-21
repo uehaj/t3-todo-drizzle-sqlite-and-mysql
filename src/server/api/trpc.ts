@@ -11,7 +11,8 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { db } from "~/server/db";
+import { db as db_sqlite } from "~/server/db/sqlite";
+import { db as db_mysql } from "~/server/db/mysql";
 
 /**
  * 1. CONTEXT
@@ -35,7 +36,8 @@ type CreateContextOptions = Record<string, never>;
  */
 const createInnerTRPCContext = (_opts: CreateContextOptions) => {
   return {
-    db,
+    db_sqlite,
+    db_mysql,
   };
 };
 
