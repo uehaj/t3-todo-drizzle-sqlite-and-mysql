@@ -1,47 +1,9 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import type { FormEvent } from "react";
-import { api } from "~/utils/api";
+import TodoAppSqlite from "~/components/TodoAppSqlite";
+import TodoAppMySql from "~/components/TodoAppMySql";
 
 const TodoApp: NextPage = () => {
-  const utils = api.useContext();
-  const todos = api.todoSqlite.getAll.useQuery();
-
-  const { mutateAsync: todoAddAsync } = api.todoSqlite.add.useMutation({
-    onSettled: () => {
-      void utils.todoSqlite.invalidate();
-    },
-  });
-
-  const { mutateAsync: todoDeleteAsync } = api.todoSqlite.delete.useMutation({
-    onSettled: () => {
-      void utils.todoSqlite.invalidate();
-    },
-  });
-
-  const { mutateAsync: todoDoneAsync } = api.todoSqlite.done.useMutation({
-    onSettled: () => {
-      void utils.todoSqlite.invalidate();
-    },
-  });
-
-  function handleAddTodo(e: FormEvent) {
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const formData = new FormData(form);
-    const formJson = Object.fromEntries(formData.entries());
-    form.reset();
-    void todoAddAsync(formJson as { text: string });
-  }
-
-  function handleDeleteTodo(id: number) {
-    void todoDeleteAsync({ id });
-  }
-
-  function handleDoneTodo(id: number, done: boolean) {
-    void todoDoneAsync({ id, done });
-  }
-
   return (
     <>
       <Head>
@@ -49,47 +11,13 @@ const TodoApp: NextPage = () => {
         <meta name="description" content="TodoApp by create-t3-app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="container mx-auto p-4">
-        <h1 className="mb-4 text-4xl font-bold">Todoアプリ</h1>
-        <div>
-          <form className="flex" onSubmit={handleAddTodo}>
-            <input
-              className="mb-4 mr-4 flex-grow rounded border p-2"
-              type="text"
-              name="text"
-              placeholder="新しいタスクを入力"
-            />
-            <button className="mb-4 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
-              タスクを追加
-            </button>
-          </form>
+      <div className="flex h-screen w-full">
+        <div className="w-1/2 bg-gray-200 p-4">
+          <TodoAppSqlite></TodoAppSqlite>
         </div>
-        <ul id="taskList" className="list-inside list-disc">
-          <ul>
-            {todos.data?.map((todo) => (
-              <li
-                className="mb-2 flex items-center rounded bg-white p-2"
-                key={todo.id}
-              >
-                <input
-                  type="checkbox"
-                  className="mr-2"
-                  checked={!!todo.done}
-                  onChange={() => handleDoneTodo(todo.id, !todo.done)}
-                />
-                <div className={todo.done ? "line-through" : ""}>
-                  {todo.text}
-                </div>
-                <button
-                  className="ml-auto rounded bg-red-500 px-2 py-1 font-bold text-white hover:bg-red-700"
-                  onClick={() => handleDeleteTodo(todo.id)}
-                >
-                  ×
-                </button>
-              </li>
-            ))}
-          </ul>
-        </ul>
+        <div className="w-1/2 bg-gray-300 p-4">
+          <TodoAppMySql></TodoAppMySql>
+        </div>
       </div>
     </>
   );
