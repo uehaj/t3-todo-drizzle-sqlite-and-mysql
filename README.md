@@ -8,8 +8,8 @@ IT Media連載記事[TypeScriptベースのフルスタックフレームワー�
 > cd t3-todo
 > cp .env.sample .env
 > npm install
-> npx drizzle-kit db push
+> docker run -d -p 3306:3306 --rm --name mysql -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=tododb mysql
+> npx dotenv npx drizzle-kit push:mysql -- --config ./drizzle_mysql.config.ts
+> npx dotenv npx drizzle-kit push:sqlite -- --config ./drizzle_sqlite.config.ts
 > npm run dev
-
 ```
-
