@@ -7,4 +7,12 @@ export const todos = sqliteTable("todos", {
   done: integer("done", { mode: "boolean" }),
   createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
+  categoryId: integer("categories_id").references(() => categories.id),
+});
+
+export const categories = sqliteTable("categories", {
+  id: integer("id").primaryKey({ autoIncrement: true }).notNull(),
+  text: text("text"),
+  createdAt: text("created_at").default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").default(sql`CURRENT_TIMESTAMP`),
 });

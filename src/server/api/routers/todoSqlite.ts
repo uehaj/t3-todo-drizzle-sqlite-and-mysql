@@ -1,16 +1,67 @@
 import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import * as schema_sqlite from "~/server/db/sqlite/schema";
+import { todos, categories } from "~/server/db/sqlite/schema";
 
 export const todoSqliteRouter = createTRPCRouter({
-  getAll: publicProcedure.input(z.void()).query(({ ctx }) => {
-    return ctx.db_sqlite.query.todos.findMany({
-      orderBy: [desc(schema_sqlite.todos.id)],
+  getAllTodo: publicProcedure.input(z.void()).query(async ({ ctx }) => {
+    const result = await ctx.db_sqlite
+      .select()
+      .from(todos)
+      .leftJoin(categories, eq(categories.id, todos.categoryId))
+      .orderBy(desc(todos.id))
+      .execute();
+    return result.map(({ todos, categories }) => ({
+      ...todos,
+      categoryId: categories?.id,
+      category: categories?.text,
+    }));
+  }),
+
+  addTodo: publicProcedure
+    .input(
+      z.object({
+        text: z.string(),
+        categoryId: z.number(),
+      }),
+    )
+    .output(z.array(z.object({ id: z.number() })))
+    .mutation(({ ctx, input }) => {
+      const { text, categoryId } = input;
+      return ctx.db_sqlite
+        .insert(todos)
+        .values({ done: false, text, categoryId })
+        .returning({ id: todos.id });
+    }),
+
+  deleteTodo: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .output(z.array(z.object({ id: z.number() })))
+    .mutation(({ ctx, input }) => {
+      const { id } = input;
+      return ctx.db_sqlite
+        .delete(todos)
+        .where(eq(todos.id, id))
+        .returning({ id: todos.id });
+    }),
+
+  doneTodo: publicProcedure
+    .input(z.object({ id: z.number(), done: z.boolean() }))
+    .mutation(({ ctx, input }) => {
+      const { id, done } = input;
+      return ctx.db_sqlite
+        .update(todos)
+        .set({ done: done, updatedAt: new Date().toISOString() })
+        .where(eq(todos.id, id));
+    }),
+
+  getAllCategories: publicProcedure.input(z.void()).query(({ ctx }) => {
+    return ctx.db_sqlite.query.categories.findMany({
+      orderBy: [desc(categories.id)],
     });
   }),
 
-  add: publicProcedure
+  addCategory: publicProcedure
     .input(
       z.object({
         text: z.string(),
@@ -20,29 +71,8 @@ export const todoSqliteRouter = createTRPCRouter({
     .mutation(({ ctx, input }) => {
       const { text } = input;
       return ctx.db_sqlite
-        .insert(schema_sqlite.todos)
-        .values({ done: false, text })
-        .returning({ id: schema_sqlite.todos.id });
-    }),
-
-  delete: publicProcedure
-    .input(z.object({ id: z.number() }))
-    .output(z.array(z.object({ id: z.number() })))
-    .mutation(({ ctx, input }) => {
-      const { id } = input;
-      return ctx.db_sqlite
-        .delete(schema_sqlite.todos)
-        .where(eq(schema_sqlite.todos.id, id))
-        .returning({ id: schema_sqlite.todos.id });
-    }),
-
-  done: publicProcedure
-    .input(z.object({ id: z.number(), done: z.boolean() }))
-    .mutation(({ ctx, input }) => {
-      const { id, done } = input;
-      return ctx.db_sqlite
-        .update(schema_sqlite.todos)
-        .set({ done: done, updatedAt: new Date().toISOString() })
-        .where(eq(schema_sqlite.todos.id, id));
+        .insert(categories)
+        .values({ text })
+        .returning({ id: categories.id });
     }),
 });

@@ -4,51 +4,73 @@ import TodoAppComponent from "./TodoAppComponent";
 
 export default function TodoAppSqlite() {
   const utils = api.useContext();
-  const todos = api.todoSqlite.getAll.useQuery();
+  const todos = api.todoSqlite.getAllTodo.useQuery();
+  const categories = api.todoSqlite.getAllCategories.useQuery();
 
-  const { mutateAsync: todoAddAsync } = api.todoSqlite.add.useMutation({
+  const { mutateAsync: addTodoAsync } = api.todoSqlite.addTodo.useMutation({
     onSettled: () => {
       void utils.todoSqlite.invalidate();
     },
   });
 
-  const { mutateAsync: todoDeleteAsync } = api.todoSqlite.delete.useMutation({
+  const { mutateAsync: deleteTodoAsync } =
+    api.todoSqlite.deleteTodo.useMutation({
+      onSettled: () => {
+        void utils.todoSqlite.invalidate();
+      },
+    });
+
+  const { mutateAsync: doneTodoAsync } = api.todoSqlite.doneTodo.useMutation({
     onSettled: () => {
       void utils.todoSqlite.invalidate();
     },
   });
 
-  const { mutateAsync: todoDoneAsync } = api.todoSqlite.done.useMutation({
-    onSettled: () => {
-      void utils.todoSqlite.invalidate();
-    },
-  });
+  const { mutateAsync: addCategoryAsync } =
+    api.todoSqlite.addCategory.useMutation({
+      onSettled: () => {
+        void utils.todoSqlite.invalidate();
+      },
+    });
 
-  async function handleAddTodo(e: FormEvent) {
+  function handleAddTodo(e: FormEvent) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
     const formJson = Object.fromEntries(formData.entries());
     form.reset();
-    const result = await todoAddAsync(formJson as { text: string });
-    console.log(`result=`, result[0]);
+    void addTodoAsync({
+      text: formJson.text as string,
+      categoryId: Number.parseInt(formJson.categoryId as string),
+    });
   }
 
   function handleDeleteTodo(id: number) {
-    void todoDeleteAsync({ id });
+    void deleteTodoAsync({ id });
   }
 
   function handleDoneTodo(id: number, done: boolean) {
-    void todoDoneAsync({ id, done });
+    void doneTodoAsync({ id, done });
+  }
+
+  function handleAddCategory(e: FormEvent) {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const formJson = Object.fromEntries(formData.entries());
+    form.reset();
+    void addCategoryAsync(formJson as { text: string });
   }
 
   return (
     <TodoAppComponent
       title={"TodoApp(Sqlite)"}
-      todos={todos}
+      todoList={todos.data}
+      categoryList={categories.data}
       handleAddTodo={handleAddTodo}
       handleDoneTodo={handleDoneTodo}
       handleDeleteTodo={handleDeleteTodo}
+      handleAddCategory={handleAddCategory}
     />
   );
 }
