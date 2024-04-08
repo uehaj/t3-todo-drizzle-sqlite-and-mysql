@@ -1,6 +1,10 @@
 # T3 Todo
 
-IT Media連載記事[TypeScriptベースのフルスタックフレームワーク「T3 Stack」で極上の開発体験を　何がすごいのか？](https://atmarkit.itmedia.co.jp/ait/articles/2304/28/news207.html)の掲載サンプルコードです。
+IT Media連載記事[フルスタックフレームワーク、T3 Stack入門 連載第3回目](https://atmarkit.itmedia.co.jp/ait/articles/2304/28/news207.html)の掲載サンプルコードです。
+
+- [TypeScriptベースのフルスタックフレームワーク「T3 Stack」で極上の開発体験を　何がすごいのか？](https://atmarkit.itmedia.co.jp/ait/articles/2304/28/news207.html)
+- [T3 Stackの要、tRPCとは？　tRPC、Zod、TanStack Queryについて解説](https://atmarkit.itmedia.co.jp/ait/articles/2307/03/news012.html)
+- [T3 Stackに新たなORMの選択肢Drizzleが登場、Prismaよりも先鋭的？](https://atmarkit.itmedia.co.jp/ait/articles/2312/07/news007.html)
 
 ## 実行手順
 
